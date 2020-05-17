@@ -1,0 +1,15 @@
+[submodule "transmission"]
+	path = transmission
+	url = git@github.com:ThisIsQasim/docker-transmission.git
+[submodule "samba"]
+	path = samba
+	url = git@github.com:ThisIsQasim/samba.git
+[submodule "turn"]
+	path = turn
+	url = git@github.com:ThisIsQasim/docker-turnserver.git
+[submodule "z-push"]
+	path = z-push
+	url = git@github.com:ThisIsQasim/z-push.git
+[submodule "tastyigniter"]
+	path = tastyigniter
+	url = git@github.com:ThisIsQasim/TastyIgniter.git
