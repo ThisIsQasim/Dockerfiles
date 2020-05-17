@@ -13,3 +13,6 @@
 [submodule "tastyigniter"]
 	path = tastyigniter
 	url = git@github.com:ThisIsQasim/TastyIgniter.git
+[submodule "onlyoffice"]
+	path = onlyoffice
+	url = git@github.com:ThisIsQasim/Docker-DocumentServer.git
