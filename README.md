@@ -1,5 +1,5 @@
 # Dockerfiles
-A collection of various Dockerfiles in use.
+A collection of various Dockerfiles in use, all rebased to debian buster.
 
 To build multiple docker images at once run
 ```
