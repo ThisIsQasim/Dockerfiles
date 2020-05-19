@@ -1,0 +1,12 @@
+FROM debian:buster-slim
+
+RUN export DEBIAN_FRONTEND=noninteractive &&\
+    \
+    apt-get -q -y update &&\
+    apt-get -q -y upgrade &&\
+    apt-get -q -y install rsyslog rsyslog-kafka &&\
+    \
+    apt-get -q -y clean &&\
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+CMD ["/usr/sbin/rsyslogd","-i","/var/run/syslogd.pid"]
