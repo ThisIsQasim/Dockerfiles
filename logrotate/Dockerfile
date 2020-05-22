@@ -21,4 +21,11 @@ RUN export DEBIAN_FRONTEND=noninteractive &&\
 COPY --from=installer /usr/local/aws-cli/ /usr/local/aws-cli/
 COPY --from=installer /aws-cli-bin/ /usr/local/bin/
 
-CMD ["/usr/sbin/logrotate","-v","-s","/var/lib/logrotate/logrotate.status","/etc/logrotate.conf"]
+# The interval between logrotate runs in seconds. And the percentage of random jitter between these runs.
+ENV STATUSFILE /var/lib/logrotate/logrotate.status
+ENV INTERVAL 3600
+ENV JITTER 10
+
+COPY run.sh /logrotated
+
+CMD ["/logrotated"]
