@@ -1,5 +1,5 @@
 #!/bin/bash
-DEFAULTPROJECTS=(onlyoffice samba tastyigniter transmission z-push)
+DEFAULTPROJECTS=(jsonresume logrotate onlyoffice rsyslog samba tastyigniter transmission turn z-push)
 PROJECTS=("${PROJECTS[@]:-${DEFAULTPROJECTS[@]}}")
 
 for PROJECT in ${PROJECTS[@]} ; do
