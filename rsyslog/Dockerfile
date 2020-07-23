@@ -2,15 +2,7 @@ FROM debian:buster-slim
 
 RUN export DEBIAN_FRONTEND=noninteractive &&\
     \
-    apt-get -q -y update &&\
-    apt-get -q -y install curl gnupg2 rsyslog rsyslog-kafka &&\
-    \
-    echo 'deb http://download.opensuse.org/repositories/home:/rgerhards/Debian_10/ /' > /etc/apt/sources.list.d/home:rgerhards.list &&\
-    curl -fsSL https://download.opensuse.org/repositories/home:rgerhards/Debian_10/Release.key | apt-key add - &&\
-    \
-    apt-get -q -y remove curl gnupg2 &&\
-    apt-get -q -y autoremove &&\
-    \
+    echo 'deb http://ftp.debian.org/debian sid main ' >> /etc/apt/sources.list
     apt-get -q -y update &&\
     apt-get -q -y install rsyslog rsyslog-kafka &&\
     \
