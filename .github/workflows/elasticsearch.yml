@@ -41,3 +41,17 @@ jobs:
         pull: true
         push: true
         tags: ${{ env.DOCKER_REPO }}/${{ env.APP }}:${{ env.VERSION }}
+
+    - name: Build and push v${{ env.VERSION }}
+      uses: docker/build-push-action@v2
+      env:
+        VERSION: '7.9.1'
+        ODFE_VERSION: '1.10.1.0'
+      with:
+        context: ${{ env.APP }}
+        file: ${{ env.APP }}/Dockerfile
+        build-args: VERSION=${{ env.VERSION }},ODFE_VERSION=${{ env.ODFE_VERSION }}
+        platforms: linux/amd64,linux/arm64
+        pull: true
+        push: true
+        tags: ${{ env.DOCKER_REPO }}/${{ env.APP }}:${{ env.VERSION }}
