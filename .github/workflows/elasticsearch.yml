@@ -36,7 +36,9 @@ jobs:
       with:
         context: ${{ env.APP }}
         file: ${{ env.APP }}/Dockerfile
-        build-args: VERSION=${{ env.VERSION }},ODFE_VERSION=${{ env.ODFE_VERSION }}
+        build-args: |
+          VERSION=${{ env.VERSION }}
+          ODFE_VERSION=${{ env.ODFE_VERSION }}
         platforms: linux/amd64,linux/arm64
         pull: true
         push: true
@@ -50,7 +52,9 @@ jobs:
       with:
         context: ${{ env.APP }}
         file: ${{ env.APP }}/Dockerfile
-        build-args: VERSION=${{ env.VERSION }},ODFE_VERSION=${{ env.ODFE_VERSION }}
+        build-args: |
+          VERSION=${{ env.VERSION }}
+          ODFE_VERSION=${{ env.ODFE_VERSION }}
         platforms: linux/amd64,linux/arm64
         pull: true
         push: true
