@@ -32,7 +32,7 @@ jobs:
       uses: docker/build-push-action@v2
       env:
         VERSION: '7.8.0'
-        ODFE_VERSION: '1.9.0.1'
+        ODFE_VERSION: 'opendistro_security_kibana_plugin-1.9.0.1'
       with:
         context: ${{ env.APP }}
         file: ${{ env.APP }}/Dockerfile
@@ -48,7 +48,23 @@ jobs:
       uses: docker/build-push-action@v2
       env:
         VERSION: '7.9.1'
-        ODFE_VERSION: '1.11.0.0'
+        ODFE_VERSION: 'opendistro_security_kibana_plugin-1.11.0.0'
+      with:
+        context: ${{ env.APP }}
+        file: ${{ env.APP }}/Dockerfile
+        build-args: |
+          VERSION=${{ env.VERSION }}
+          ODFE_VERSION=${{ env.ODFE_VERSION }}
+        platforms: linux/amd64,linux/arm64
+        pull: true
+        push: true
+        tags: ${{ env.DOCKER_REPO }}/${{ env.APP }}:${{ env.VERSION }}
+
+    - name: Build and push v${{ env.VERSION }}
+      uses: docker/build-push-action@v2
+      env:
+        VERSION: '7.10.0'
+        ODFE_VERSION: 'opendistroSecurityKibana-1.12.0.0'
       with:
         context: ${{ env.APP }}
         file: ${{ env.APP }}/Dockerfile
