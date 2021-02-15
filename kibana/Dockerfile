@@ -19,6 +19,10 @@ RUN ODFE_PLUGINS_ARR=($ODFE_PLUGINS);\
     \
     echo 'opendistro_security.cookie.secure: true' >> /usr/share/kibana/config/kibana.yml &&\
     echo 'opendistro_security.cookie.password: ${KIBANA_COOKIE_PWD}' >> /usr/share/kibana/config/kibana.yml &&\
-    echo 'opendistro_security.multitenancy.enabled: false' >> /usr/share/kibana/config/kibana.yml
+    echo 'opendistro_security.multitenancy.enabled: true' >> /usr/share/kibana/config/kibana.yml &&\
+    echo 'opendistro_security.multitenancy.tenants.enable_global: true' >> /usr/share/kibana/config/kibana.yml &&\
+    echo 'opendistro_security.multitenancy.tenants.enable_private: true' >> /usr/share/kibana/config/kibana.yml &&\
+    echo 'opendistro_security.multitenancy.tenants.preferred: ["Private", "Global"]' >> /usr/share/kibana/config/kibana.yml &&\
+    echo 'opendistro_security.multitenancy.enable_filter: false' >> /usr/share/kibana/config/kibana.yml
 
 SHELL ["/bin/sh", "-c"]

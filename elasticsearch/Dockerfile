@@ -18,7 +18,7 @@ RUN ODFE_PLUGINS_ARR=($ODFE_PLUGINS);\
         /usr/share/elasticsearch/bin/elasticsearch-plugin install --batch ${ODFE_URL}/${i}.zip;\
     done;\
     /usr/share/elasticsearch/bin/elasticsearch-plugin install --batch repository-s3 repository-gcs &&\
-    sed -i 's/#kibana:/kibana:/g; s/#multitenancy_enabled: true/  multitenancy_enabled: false/g' \
+    sed -i 's/#kibana:/kibana:/g; s/#multitenancy_enabled: true/  multitenancy_enabled: true/g' \
     plugins/opendistro_security/securityconfig/config.yml
 
 SHELL ["/bin/sh", "-c"]
