@@ -32,13 +32,12 @@ jobs:
       uses: docker/build-push-action@v2
       env:
         VERSION: '7.8.0'
-        ODFE_VERSION: '1.9.0.2'
       with:
         context: ${{ env.APP }}
         file: ${{ env.APP }}/Dockerfile
         build-args: |
           VERSION=${{ env.VERSION }}
-          ODFE_VERSION=${{ env.ODFE_VERSION }}
+          ODFE_PLUGINS=opendistro-security/opendistro_security-1.9.0.0 opendistro-alerting/opendistro_alerting-1.9.0.0 opendistro-job-scheduler/opendistro-job-scheduler-1.9.0.0 opendistro-anomaly-detection/opendistro-anomaly-detection-1.9.0.0 opendistro-sql/opendistro_sql-1.9.0.0
         platforms: linux/amd64,linux/arm64
         pull: true
         push: true
@@ -48,13 +47,12 @@ jobs:
       uses: docker/build-push-action@v2
       env:
         VERSION: '7.9.1'
-        ODFE_VERSION: '1.11.0.0'
       with:
         context: ${{ env.APP }}
         file: ${{ env.APP }}/Dockerfile
         build-args: |
           VERSION=${{ env.VERSION }}
-          ODFE_VERSION=${{ env.ODFE_VERSION }}
+          ODFE_PLUGINS=opendistro-security/opendistro_security-1.11.0.0 opendistro-alerting/opendistro_alerting-1.11.0.1 opendistro-job-scheduler/opendistro-job-scheduler-1.11.0.0 opendistro-anomaly-detection/opendistro-anomaly-detection-1.11.0.0 opendistro-sql/opendistro_sql-1.11.0.0
         platforms: linux/amd64,linux/arm64
         pull: true
         push: true
@@ -64,13 +62,12 @@ jobs:
       uses: docker/build-push-action@v2
       env:
         VERSION: '7.10.0'
-        ODFE_VERSION: '1.12.0.0'
       with:
         context: ${{ env.APP }}
         file: ${{ env.APP }}/Dockerfile
         build-args: |
           VERSION=${{ env.VERSION }}
-          ODFE_VERSION=${{ env.ODFE_VERSION }}
+          ODFE_PLUGINS=opendistro-security/opendistro_security-1.12.0.0 opendistro-alerting/opendistro_alerting-1.12.0.2 opendistro-job-scheduler/opendistro-job-scheduler-1.12.0.0 opendistro-anomaly-detection/opendistro-anomaly-detection-1.12.0.0 opendistro-sql/opendistro_sql-1.12.0.0 opendistro-reports-scheduler/opendistro-reports-scheduler-1.12.0.0
         platforms: linux/amd64,linux/arm64
         pull: true
         push: true
