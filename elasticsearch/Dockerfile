@@ -1,12 +1,13 @@
-ARG VERSION=7.10.0
+ARG VERSION=7.10.2
 FROM docker.elastic.co/elasticsearch/elasticsearch-oss:${VERSION}
 
-ARG ODFE_PLUGINS="opendistro-security/opendistro_security-1.12.0.0 \
-    opendistro-alerting/opendistro_alerting-1.12.0.2 \
-    opendistro-job-scheduler/opendistro-job-scheduler-1.12.0.0 \
-    opendistro-anomaly-detection/opendistro-anomaly-detection-1.12.0.0 \
-    opendistro-sql/opendistro_sql-1.12.0.0 \
-    opendistro-reports-scheduler/opendistro-reports-scheduler-1.12.0.0"
+ARG ODFE_PLUGINS="opendistro-security/opendistro-security-1.13.0.0 \
+                  opendistro-alerting/opendistro-alerting-1.13.0.0 \
+                  opendistro-job-scheduler/opendistro-job-scheduler-1.13.0.0 \
+                  opendistro-anomaly-detection/opendistro-anomaly-detection-1.13.0.0 \
+                  opendistro-sql/opendistro-sql-1.13.0.0 \
+                  opendistro-reports-scheduler/opendistro-reports-scheduler-1.13.0.0 \
+                  opendistro-asynchronous-search/opendistro-asynchronous-search-1.13.0.1"
 
 ENV ODFE_URL="https://d3g5vo6xdbdb9a.cloudfront.net/downloads/elasticsearch-plugins"
 
