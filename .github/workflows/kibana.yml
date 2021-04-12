@@ -37,7 +37,7 @@ jobs:
         file: ${{ env.APP }}/Dockerfile
         build-args: |
           VERSION=${{ env.VERSION }}
-          ODFE_PLUGINS=opendistro-security/opendistro_security_kibana_plugin-1.9.0.0 opendistro-alerting/opendistro-alerting-1.9.0.0 opendistro-anomaly-detection/opendistro-anomaly-detection-kibana-1.9.0.0 opendistro-query-workbench/opendistro-sql-workbench-1.9.0.0
+          ODFE_PLUGINS=opendistro-security/opendistro_security_kibana_plugin-1.9.0.0 opendistro-alerting/opendistro-alerting-1.9.0.0 opendistro-index-management/opendistro_index_management_kibana-1.9.0.0 opendistro-anomaly-detection/opendistro-anomaly-detection-kibana-1.9.0.0 opendistro-query-workbench/opendistro-sql-workbench-1.9.0.0
         platforms: linux/amd64,linux/arm64
         pull: true
         push: true
@@ -52,7 +52,7 @@ jobs:
         file: ${{ env.APP }}/Dockerfile
         build-args: |
           VERSION=${{ env.VERSION }}
-          ODFE_PLUGINS=opendistro-security/opendistro_security_kibana_plugin-1.11.0.0 opendistro-alerting/opendistro-alerting-1.11.0.2 opendistro-anomaly-detection/opendistro-anomaly-detection-kibana-1.11.0.0 opendistro-query-workbench/opendistro-query-workbench-1.11.0.0 opendistro-notebooks/opendistro-notebooks-kibana-1.11.0.0
+          ODFE_PLUGINS=opendistro-security/opendistro_security_kibana_plugin-1.11.0.0 opendistro-alerting/opendistro-alerting-1.11.0.2 opendistro-index-management/opendistro_index_management_kibana-1.11.0.0 opendistro-anomaly-detection/opendistro-anomaly-detection-kibana-1.11.0.0 opendistro-query-workbench/opendistro-query-workbench-1.11.0.0 opendistro-notebooks/opendistro-notebooks-kibana-1.11.0.0
         platforms: linux/amd64,linux/arm64
         pull: true
         push: true
@@ -67,7 +67,7 @@ jobs:
         file: ${{ env.APP }}/Dockerfile
         build-args: |
           VERSION=${{ env.VERSION }}
-          ODFE_PLUGINS=opendistro-security/opendistroSecurityKibana-1.13.0.1 opendistro-alerting/opendistroAlertingKibana-1.13.0.0 opendistro-anomaly-detection/opendistroAnomalyDetectionKibana-1.13.0.0 opendistro-query-workbench/opendistroQueryWorkbenchKibana-1.13.0.0 opendistro-notebooks/opendistroNotebooksKibana-1.13.0.0 opendistro-reports/linux/x64/opendistroReportsKibana-1.13.0.0-linux-x64 opendistro-gantt-chart/opendistroGanttChartKibana-1.13.0.0 opendistro-trace-analytics/opendistroTraceAnalyticsKibana-1.13.0.0-alpha
+          ODFE_PLUGINS=opendistro-security/opendistroSecurityKibana-1.13.0.1 opendistro-alerting/opendistroAlertingKibana-1.13.0.0 opendistro-anomaly-detection/opendistroAnomalyDetectionKibana-1.13.0.0 opendistro-query-workbench/opendistroQueryWorkbenchKibana-1.13.0.0 opendistro-notebooks/opendistroNotebooksKibana-1.13.2.0 opendistro-reports/linux/x64/opendistroReportsKibana-1.13.2.0-linux-x64 opendistro-gantt-chart/opendistroGanttChartKibana-1.13.0.0 opendistro-trace-analytics/opendistroTraceAnalyticsKibana-1.13.2.0
         platforms: linux/amd64,linux/arm64
         pull: true
         push: true
