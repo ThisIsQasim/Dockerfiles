@@ -37,7 +37,7 @@ jobs:
         file: ${{ env.APP }}/Dockerfile
         build-args: |
           VERSION=${{ env.VERSION }}
-          ODFE_PLUGINS=opendistro-security/opendistro_security-1.9.0.0 opendistro-alerting/opendistro_alerting-1.9.0.0 opendistro-job-scheduler/opendistro-job-scheduler-1.9.0.0 opendistro-anomaly-detection/opendistro-anomaly-detection-1.9.0.0 opendistro-sql/opendistro_sql-1.9.0.0
+          ODFE_PLUGINS=opendistro-security/opendistro_security-1.9.0.0 opendistro-alerting/opendistro_alerting-1.9.0.0 opendistro-job-scheduler/opendistro-job-scheduler-1.9.0.0 opendistro-index-management/opendistro-index-management-1.9.0.0 opendistro-anomaly-detection/opendistro-anomaly-detection-1.9.0.0 opendistro-sql/opendistro_sql-1.9.0.0
         platforms: linux/amd64,linux/arm64
         pull: true
         push: true
@@ -52,7 +52,7 @@ jobs:
         file: ${{ env.APP }}/Dockerfile
         build-args: |
           VERSION=${{ env.VERSION }}
-          ODFE_PLUGINS=opendistro-security/opendistro_security-1.11.0.0 opendistro-alerting/opendistro_alerting-1.11.0.1 opendistro-job-scheduler/opendistro-job-scheduler-1.11.0.0 opendistro-anomaly-detection/opendistro-anomaly-detection-1.11.0.0 opendistro-sql/opendistro_sql-1.11.0.0
+          ODFE_PLUGINS=opendistro-security/opendistro_security-1.11.0.0 opendistro-alerting/opendistro_alerting-1.11.0.1 opendistro-job-scheduler/opendistro-job-scheduler-1.11.0.0 opendistro-index-management/opendistro-index-management-1.11.0.0 opendistro-anomaly-detection/opendistro-anomaly-detection-1.11.0.0 opendistro-sql/opendistro_sql-1.11.0.0
         platforms: linux/amd64,linux/arm64
         pull: true
         push: true
@@ -67,7 +67,7 @@ jobs:
         file: ${{ env.APP }}/Dockerfile
         build-args: |
           VERSION=${{ env.VERSION }}
-          ODFE_PLUGINS=opendistro-security/opendistro-security-1.13.0.0 opendistro-alerting/opendistro-alerting-1.13.0.0 opendistro-job-scheduler/opendistro-job-scheduler-1.13.0.0 opendistro-anomaly-detection/opendistro-anomaly-detection-1.13.0.0 opendistro-sql/opendistro-sql-1.13.0.0 opendistro-reports-scheduler/opendistro-reports-scheduler-1.13.0.0 opendistro-asynchronous-search/opendistro-asynchronous-search-1.13.0.1
+          ODFE_PLUGINS=opendistro-security/opendistro-security-1.13.0.0 opendistro-alerting/opendistro-alerting-1.13.0.0 opendistro-job-scheduler/opendistro-job-scheduler-1.13.0.0 opendistro-index-management/opendistro-index-management-1.13.2.0 opendistro-anomaly-detection/opendistro-anomaly-detection-1.13.0.0 opendistro-sql/opendistro-sql-1.13.0.0 opendistro-reports-scheduler/opendistro-reports-scheduler-1.13.0.0 opendistro-asynchronous-search/opendistro-asynchronous-search-1.13.0.1
         platforms: linux/amd64,linux/arm64
         pull: true
         push: true

@@ -4,6 +4,7 @@ FROM docker.elastic.co/elasticsearch/elasticsearch-oss:${VERSION}
 ARG ODFE_PLUGINS="opendistro-security/opendistro-security-1.13.0.0 \
                   opendistro-alerting/opendistro-alerting-1.13.0.0 \
                   opendistro-job-scheduler/opendistro-job-scheduler-1.13.0.0 \
+                  opendistro-index-management/opendistro-index-management-1.13.2.0 \
                   opendistro-anomaly-detection/opendistro-anomaly-detection-1.13.0.0 \
                   opendistro-sql/opendistro-sql-1.13.0.0 \
                   opendistro-reports-scheduler/opendistro-reports-scheduler-1.13.0.0 \
