@@ -3,8 +3,10 @@ name: Docker Image CI
 on:
   push:
     branches: [ master ]
+    paths: [ "kibana" ]
   pull_request:
     branches: [ master ]
+    paths: [ "kibana" ]
 
 jobs:
 
