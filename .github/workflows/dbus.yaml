@@ -1,0 +1,17 @@
+name: Docker Image CI - dbus
+
+on:
+  push:
+    branches: [ master ]
+    paths: [ "dbus", ".github/workflows/dbus.yaml" ]
+  pull_request:
+    branches: [ master ]
+    paths: [ "dbus" ]
+  workflow_dispatch:
+
+jobs:
+
+  build-and-push:
+    uses: ./.github/workflows/build-and-push.yaml
+    with:
+      app: dbus
