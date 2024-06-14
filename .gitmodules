@@ -19,3 +19,6 @@
 [submodule "apcupsd"]
 	path = apcupsd
 	url = git@github.com:ThisIsQasim/apcupsd.git
+[submodule "speedtest-go"]
+	path = speedtest-go
+	url = git@github.com:ThisIsQasim/speedtest-go.git
