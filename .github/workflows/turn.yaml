@@ -1,0 +1,17 @@
+name: Docker Image CI - turn
+
+on:
+  push:
+    branches: [ master ]
+    paths: [ "turn", ".github/workflows/turn.yaml" ]
+  pull_request:
+    branches: [ master ]
+    paths: [ "turn" ]
+  workflow_dispatch:
+
+jobs:
+
+  build-and-push:
+    uses: ./.github/workflows/build-and-push.yaml
+    with:
+      app: turn
