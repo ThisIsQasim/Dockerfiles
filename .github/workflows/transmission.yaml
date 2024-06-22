@@ -3,12 +3,11 @@ name: Docker Image CI - Transmission
 on:
   push:
     branches: [ master ]
+    tags: ['v*']
     paths: [ "transmission", ".github/workflows/transmission.yaml", ".github/workflows/build-and-push.yaml" ]
   pull_request:
     branches: [ master ]
     paths: [ "transmission" ]
-  tags:
-    - 'v*'
   workflow_dispatch:
 
 jobs:
