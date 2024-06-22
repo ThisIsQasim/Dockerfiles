@@ -3,10 +3,12 @@ name: Docker Image CI - turn
 on:
   push:
     branches: [ master ]
-    paths: [ "turn", ".github/workflows/turn.yaml" ]
+    paths: [ "turn", ".github/workflows/turn.yaml", ".github/workflows/build-and-push.yaml"]
   pull_request:
     branches: [ master ]
     paths: [ "turn" ]
+  tags:
+    - 'v*'
   workflow_dispatch:
 
 jobs:

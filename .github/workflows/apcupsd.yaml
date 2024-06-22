@@ -3,10 +3,12 @@ name: Docker Image CI - apcupsd
 on:
   push:
     branches: [ master ]
-    paths: [ "apcupsd", ".github/workflows/apcupsd.yaml" ]
+    paths: [ "apcupsd", ".github/workflows/apcupsd.yaml", ".github/workflows/build-and-push.yaml" ]
   pull_request:
     branches: [ master ]
     paths: [ "apcupsd" ]
+  tags:
+    - 'v*'
   workflow_dispatch:
 
 jobs:

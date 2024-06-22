@@ -3,10 +3,12 @@ name: Docker Image CI - Avahi
 on:
   push:
     branches: [ master ]
-    paths: [ "avahi", ".github/workflows/avahi.yaml" ]
+    paths: [ "avahi", ".github/workflows/avahi.yaml", ".github/workflows/build-and-push.yaml" ]
   pull_request:
     branches: [ master ]
     paths: [ "avahi" ]
+  tags:
+    - 'v*'
   workflow_dispatch:
 
 jobs:

@@ -3,10 +3,12 @@ name: Docker Image CI - Samba
 on:
   push:
     branches: [ master ]
-    paths: [ "samba", ".github/workflows/samba.yaml" ]
+    paths: [ "samba", ".github/workflows/samba.yaml", ".github/workflows/build-and-push.yaml" ]
   pull_request:
     branches: [ master ]
     paths: [ "samba" ]
+  tags:
+    - 'v*'
   workflow_dispatch:
 
 jobs:
