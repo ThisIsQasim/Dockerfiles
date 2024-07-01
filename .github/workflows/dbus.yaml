@@ -4,7 +4,7 @@ on:
   push:
     branches: [ master ]
     tags: ['v*']
-    paths: [ "dbus", ".github/workflows/dbus.yaml", ".github/workflows/build-and-push.yaml" ]
+    paths: [ "dbus/**", ".github/workflows/dbus.yaml", ".github/workflows/build-and-push.yaml" ]
   pull_request:
     branches: [ master ]
     paths: [ "dbus" ]

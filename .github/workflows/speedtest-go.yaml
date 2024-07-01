@@ -4,7 +4,7 @@ on:
   push:
     branches: [ master ]
     tags: ['v*']
-    paths: [ "speedtest-go", ".github/workflows/speedtest-go.yaml", ".github/workflows/build-and-push.yaml" ]
+    paths: [ "speedtest-go/**", ".github/workflows/speedtest-go.yaml", ".github/workflows/build-and-push.yaml" ]
   pull_request:
     branches: [ master ]
     paths: [ "speedtest-go" ]

@@ -4,7 +4,7 @@ on:
   push:
     branches: [ master ]
     tags: ['v*']
-    paths: [ "samba", ".github/workflows/samba.yaml", ".github/workflows/build-and-push.yaml" ]
+    paths: [ "samba/**", ".github/workflows/samba.yaml", ".github/workflows/build-and-push.yaml" ]
   pull_request:
     branches: [ master ]
     paths: [ "samba" ]

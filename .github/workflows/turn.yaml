@@ -4,7 +4,7 @@ on:
   push:
     branches: [ master ]
     tags: ['v*']
-    paths: [ "turn", ".github/workflows/turn.yaml", ".github/workflows/build-and-push.yaml"]
+    paths: [ "turn/**", ".github/workflows/turn.yaml", ".github/workflows/build-and-push.yaml"]
   pull_request:
     branches: [ master ]
     paths: [ "turn" ]
