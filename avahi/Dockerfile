@@ -1,7 +1,7 @@
 FROM debian:stable-slim
 
 RUN apt-get update &&\
-    apt-get install -y avahi-daemon &&\
+    apt-get install -y avahi-daemon avahi-utils &&\
     \
     apt-get -q -y clean &&\
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
