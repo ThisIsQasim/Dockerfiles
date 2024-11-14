@@ -22,3 +22,6 @@
 [submodule "speedtest-go"]
 	path = speedtest-go
 	url = git@github.com:ThisIsQasim/speedtest-go.git
+[submodule "spoofdpi"]
+	path = spoofdpi
+	url = git@github.com:xvzc/SpoofDPI.git
