@@ -3,7 +3,7 @@ name: Docker Image CI - speedtest-go
 on:
   push:
     branches: [ master ]
-    tags: ['v*']
+    tags: ["v*", "speedtest-go-*"]
     paths: [ "speedtest-go/**", ".github/workflows/speedtest-go.yaml", ".github/workflows/build-and-push.yaml" ]
   pull_request:
     branches: [ master ]

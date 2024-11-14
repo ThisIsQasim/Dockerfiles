@@ -3,7 +3,7 @@ name: Docker Image CI - zte-hack
 on:
   push:
     branches: [ master ]
-    tags: ['v*']
+    tags: ["v*", "zte-hack-*"]
     paths: [ "zte-hack/**", ".github/workflows/zte-hack.yaml", ".github/workflows/build-and-push.yaml" ]
   pull_request:
     branches: [ master ]

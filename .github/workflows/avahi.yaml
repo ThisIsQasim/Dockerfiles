@@ -3,7 +3,7 @@ name: Docker Image CI - Avahi
 on:
   push:
     branches: [ master ]
-    tags: ['v*']
+    tags: ["v*", "avahi-*"]
     paths: [ "avahi/**", ".github/workflows/avahi.yaml", ".github/workflows/build-and-push.yaml" ]
   pull_request:
     branches: [ master ]
