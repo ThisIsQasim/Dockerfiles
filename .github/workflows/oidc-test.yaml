@@ -1,0 +1,29 @@
+on:
+  push:
+    branches: [ "oidc-test" ]
+  workflow_dispatch:
+
+jobs:
+
+  build-and-push:
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+
+    concurrency:
+      group: ${{ github.workflow }}
+      cancel-in-progress: false
+
+    steps:
+    - name: Install OIDC Client from Core Package
+      run: npm install @actions/core@1.6.0 @actions/http-client
+    - name: Get Id Token
+      uses: actions/github-script@v7
+      id: idtoken
+      with:
+        script: |
+          const coredemo = require('@actions/core')
+          let id_token = await coredemo.getIDToken()
+          coredemo.setOutput('id_token', id_token)
