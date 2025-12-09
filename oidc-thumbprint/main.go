@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"crypto/sha1"
 	"crypto/tls"
 	"fmt"
@@ -9,7 +10,7 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/zitadel/oidc/pkg/client"
+	"github.com/zitadel/oidc/v3/pkg/client"
 )
 
 func fingerprint(address string) string {
@@ -29,11 +30,12 @@ func fingerprint(address string) string {
 }
 
 func main() {
-	if len(os.Args) == 0 {
+	if len(os.Args) < 2 {
 		panic(fmt.Errorf("requires argument: OIDC issuer"))
 	}
 
-	config, err := client.Discover(os.Args[1], &http.Client{})
+	issuer := os.Args[1]
+	config, err := client.Discover(context.Background(), issuer, &http.Client{})
 	if err != nil {
 		panic(err)
 	}
