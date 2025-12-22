@@ -1,9 +1,6 @@
 [submodule "transmission"]
 	path = transmission
 	url = git@github.com:ThisIsQasim/docker-transmission.git
-[submodule "samba"]
-	path = samba
-	url = git@github.com:ThisIsQasim/samba.git
 [submodule "turn"]
 	path = turn
 	url = git@github.com:ThisIsQasim/docker-turnserver.git
