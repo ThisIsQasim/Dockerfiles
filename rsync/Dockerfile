@@ -1,7 +1,10 @@
-FROM alpine:latest
+FROM debian:stable-slim
 
-RUN apk add --update-cache \
-    	rsync \
-    	openssh-client \
-    	tzdata \
-	&& rm -rf /var/cache/apk/*
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    rsync \
+    openssh-client \
+    tzdata && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
