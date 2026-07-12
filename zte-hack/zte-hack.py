@@ -97,9 +97,7 @@ if __name__ == "__main__":
             if s is None:
                 s = login()
 
-            exists = check_wan(s)
-
-            if exists:
+            if check_wan(s):
                 delete_wan(s)
             else:
                 logging.debug("omci_ipv4_pppoe_1 WAN interface not found. Nothing to delete")
