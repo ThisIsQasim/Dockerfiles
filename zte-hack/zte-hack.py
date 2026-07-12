@@ -1,10 +1,7 @@
-import logging, os, re, requests
-from ping3 import ping
+import html, logging, os, re, requests
 from time import sleep
 
-INTERNET_CHECK_IP = os.getenv("INTERNET_CHECK_IP", "1.1.1.1")
-INTERNET_CHECK_ALT_IP = os.getenv("INTERNET_CHECK_ALT_IP", "8.8.8.8")
-INTERVAL_SECONDS = int(os.getenv("INTERVAL_SECONDS", "10"))
+INTERVAL_SECONDS = int(os.getenv("INTERVAL_SECONDS", "300"))
 
 ROUTER_IP = os.getenv("ROUTER_IP", "192.168.8.1")
 ROUTER_URL = os.getenv("ROUTER_URL", f"http://{ROUTER_IP}")
@@ -16,7 +13,11 @@ LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
 logging.basicConfig(level=LOG_LEVEL)
 
 
-def delete_wan_from_ont():
+class SessionLoggedOut(Exception):
+    pass
+
+
+def login():
     s = requests.Session()
 
     response = s.get(ROUTER_URL)
@@ -30,14 +31,31 @@ def delete_wan_from_ont():
         "Password": ROUTER_PASSWORD,
     }
 
-    response = s.post(
+    s.post(
         ROUTER_URL,
         allow_redirects=False,
         headers={"Content-Type": "application/x-www-form-urlencoded"},
         data=data,
     )
-    response = s.get(f"{ROUTER_URL}/start.ghtml")
+    s.get(f"{ROUTER_URL}/start.ghtml")
 
+    return s
+
+
+def check_wan(s):
+    params = {
+        "pid": "1002",
+        "nextpage": "IPv46_status_wan2_if_t.gch",
+    }
+    response = s.get(f"{ROUTER_URL}/getpage.gch", params=params)
+
+    if "logout_redirect" in response.text:
+        raise SessionLoggedOut
+
+    return "omci_ipv4_pppoe_1" in html.unescape(response.text)
+
+
+def delete_wan(s):
     params = {
         "pid": "1002",
         "nextpage": "IPv46_net_wan2_conf_t.gch",
@@ -68,26 +86,29 @@ def delete_wan_from_ont():
         headers={"Content-Type": "application/x-www-form-urlencoded"},
         data=data,
     )
+    logging.info("Deleted omci_ipv4_pppoe_1 WAN interface")
     return response
 
 
 if __name__ == "__main__":
-    LAST_ONLINE = False
+    s = None
     while True:
-        if ping(INTERNET_CHECK_IP) or ping(INTERNET_CHECK_ALT_IP):
-            if not LAST_ONLINE:
-                logging.info(
-                    f"Looks like internet is reachable. Sleeping for {INTERVAL_SECONDS} seconds"
-                )
-            LAST_ONLINE = True
-            sleep(INTERVAL_SECONDS)
-        else:
-            logging.info(
-                "Looks like internet is unreachable. Checking if CPE is reachable"
-            )
-            LAST_ONLINE = False
-            if ping(ROUTER_IP):
-                logging.info("CPE is reachable. Deleting WAN interface")
-                delete_wan_from_ont()
+        try:
+            if s is None:
+                s = login()
+
+            exists = check_wan(s)
+
+            if exists:
+                delete_wan(s)
             else:
-                logging.info("CPE is also unreachable. Trying again")
+                logging.debug("omci_ipv4_pppoe_1 WAN interface not found. Nothing to delete")
+        except SessionLoggedOut:
+            logging.info("Session logged out. Logging in again next iteration")
+            s.close()
+            s = None
+        except requests.exceptions.RequestException:
+            logging.info("CPE is unreachable. Trying again")
+            s = None
+
+        sleep(INTERVAL_SECONDS)
