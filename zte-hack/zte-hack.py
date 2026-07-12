@@ -2,6 +2,7 @@ import html, logging, os, re, requests
 from time import sleep
 
 INTERVAL_SECONDS = int(os.getenv("INTERVAL_SECONDS", "300"))
+RETRY_INTERVAL_SECONDS = int(os.getenv("RETRY_INTERVAL_SECONDS", "1"))
 
 ROUTER_IP = os.getenv("ROUTER_IP", "192.168.8.1")
 ROUTER_URL = os.getenv("ROUTER_URL", f"http://{ROUTER_IP}")
@@ -93,10 +94,10 @@ def delete_wan(s):
 if __name__ == "__main__":
     s = None
     while True:
+        interval = INTERVAL_SECONDS
         try:
             if s is None:
                 s = login()
-
             if check_wan(s):
                 delete_wan(s)
             else:
@@ -105,8 +106,10 @@ if __name__ == "__main__":
             logging.info("Session logged out. Logging in again next iteration")
             s.close()
             s = None
+            interval = RETRY_INTERVAL_SECONDS
         except requests.exceptions.RequestException:
             logging.info("CPE is unreachable. Trying again")
             s = None
+            interval = RETRY_INTERVAL_SECONDS
 
-        sleep(INTERVAL_SECONDS)
+        sleep(interval)
