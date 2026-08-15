@@ -3,18 +3,17 @@ name: Docker Image CI - VictoriaMetrics
 on:
   push:
     branches: [ master ]
-    paths: [ "victoriametrics", ".github/workflows/victoriametrics.yaml" ]
+    paths: [ "victoriametrics/**", ".github/workflows/victoriametrics.yaml" ]
   pull_request:
     branches: [ master ]
-    paths: [ "victoriametrics" ]
+    paths: [ "victoriametrics/**" ]
   workflow_dispatch:
     inputs:
       tag:
         description: >-
-          VictoriaMetrics version to build, e.g. v1.122.27 (the plain
-          version tag - "-cluster" is appended automatically, matching
-          upstream's own tag naming). Leave empty to build every version
-          clusternest/api's PrometheusCreate.version currently offers.
+          VictoriaMetrics version to build, e.g. v1.122.27. Leave empty to
+          build every version clusternest/api's PrometheusCreate.version
+          currently offers.
         required: false
 
 jobs:
@@ -55,21 +54,20 @@ jobs:
         app: [vminsert, vmselect, vmstorage]
 
     steps:
-    - name: Checkout
+    - name: Checkout Dockerfile
       uses: actions/checkout@v2
-      with:
-        submodules: true
 
-    - name: Checkout VictoriaMetrics ${{ matrix.tag }}-cluster
-      # vminsert/vmselect/vmstorage's Dockerfiles don't exist on the plain
-      # version tag (e.g. v1.122.27) - they only exist on the "-cluster"
-      # suffixed tag, a separate ref in the same repo (confirmed by diffing
-      # the two tags' trees). This always checks out whatever the matrix
-      # asked for, ignoring the submodule's own pinned commit entirely.
-      working-directory: victoriametrics
+    - name: Shallow clone VictoriaMetrics ${{ matrix.tag }}
+      # No submodule: there's no single upstream commit that works for
+      # every version being built here (each matrix entry needs a
+      # different tag), so this clones fresh per build instead. Plain
+      # version tag, not "-cluster" - that suffix only exists for each
+      # LTS line's .0 release; later patches were never given one (see
+      # victoriametrics/Dockerfile for how this was confirmed), but the
+      # plain tag still has the Go source needed to build from.
       run: |
-        git fetch --depth 1 origin tag ${{ matrix.tag }}-cluster
-        git checkout ${{ matrix.tag }}-cluster
+        git clone --depth 1 --branch ${{ matrix.tag }} \
+          https://github.com/VictoriaMetrics/VictoriaMetrics.git victoriametrics-checkout
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v1
@@ -83,22 +81,26 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Build and push
-      # Upstream's own publish-via-docker target (deployment/docker/Makefile)
-      # - compiles via a docker-based Go builder, then a buildx multi-arch
-      # push. DOCKER_REGISTRIES/DOCKER_NAMESPACE override its Docker
-      # Hub/quay.io defaults to push here instead.
-      if: github.event_name != 'pull_request'
-      working-directory: victoriametrics
-      run: |
-        make publish-via-docker \
-          APP_NAME=${{ matrix.app }} \
-          PKG_TAG=${{ matrix.tag }}-cluster \
-          DOCKER_REGISTRIES=ghcr.io \
-          DOCKER_NAMESPACE=${{ github.repository_owner }}
+    - name: Read Go version from go.mod
+      id: go-version
+      run: echo "version=$(grep -m1 '^go ' victoriametrics-checkout/go.mod | awk '{print $2}')" >> "$GITHUB_OUTPUT"
 
-    - name: Build only (PR - no push)
-      if: github.event_name == 'pull_request'
-      working-directory: victoriametrics
-      run: |
-        make app-via-docker-linux-amd64 APP_NAME=${{ matrix.app }}
+    - name: Build and push
+      uses: docker/build-push-action@v2
+      with:
+        context: victoriametrics-checkout
+        file: victoriametrics/Dockerfile
+        platforms: linux/amd64,linux/arm64
+        cache-from: type=gha,scope=${{ matrix.app }}-${{ matrix.tag }}
+        cache-to: type=gha,mode=max,scope=${{ matrix.app }}-${{ matrix.tag }}
+        pull: true
+        push: ${{ github.event_name != 'pull_request' }}
+        build-args: |
+          GO_VERSION=${{ steps.go-version.outputs.version }}
+          APP_NAME=${{ matrix.app }}
+          VERSION=${{ matrix.tag }}
+        # -cluster suffix kept on the pushed image tag even though nothing
+        # here is Docker-Hub-tag-format-constrained anymore, purely so
+        # clusternest/api's controllers/victoriametrics.py (which computes
+        # f"v{version}-cluster") needs no change to match.
+        tags: ghcr.io/${{ github.repository_owner }}/${{ matrix.app }}:${{ matrix.tag }}-cluster
