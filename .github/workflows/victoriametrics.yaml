@@ -85,6 +85,13 @@ jobs:
       id: go-version
       run: echo "version=$(grep -m1 '^go ' victoriametrics-checkout/go.mod | awk '{print $2}')" >> "$GITHUB_OUTPUT"
 
+    - name: Lowercase repo owner
+      # GHCR repository names must be lowercase; github.repository_owner
+      # isn't ("ThisIsQasim" as-is fails buildx with "repository name must
+      # be lowercase").
+      id: repo-owner
+      run: echo "owner=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
+
     - name: Build and push
       uses: docker/build-push-action@v2
       with:
@@ -103,4 +110,4 @@ jobs:
         # here is Docker-Hub-tag-format-constrained anymore, purely so
         # clusternest/api's controllers/victoriametrics.py (which computes
         # f"v{version}-cluster") needs no change to match.
-        tags: ghcr.io/${{ github.repository_owner }}/${{ matrix.app }}:${{ matrix.tag }}-cluster
+        tags: ghcr.io/${{ steps.repo-owner.outputs.owner }}/${{ matrix.app }}:${{ matrix.tag }}-cluster
