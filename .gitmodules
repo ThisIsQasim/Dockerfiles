@@ -22,3 +22,7 @@
 [submodule "spoofdpi"]
 	path = spoofdpi
 	url = git@github.com:xvzc/SpoofDPI.git
+[submodule "victoriametrics"]
+	path = victoriametrics
+	url = https://github.com/VictoriaMetrics/VictoriaMetrics.git
+	shallow = true

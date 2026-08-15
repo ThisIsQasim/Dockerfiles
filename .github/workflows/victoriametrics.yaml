@@ -1,0 +1,104 @@
+name: Docker Image CI - VictoriaMetrics
+
+on:
+  push:
+    branches: [ master ]
+    paths: [ "victoriametrics", ".github/workflows/victoriametrics.yaml" ]
+  pull_request:
+    branches: [ master ]
+    paths: [ "victoriametrics" ]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: >-
+          VictoriaMetrics version to build, e.g. v1.122.27 (the plain
+          version tag - "-cluster" is appended automatically, matching
+          upstream's own tag naming). Leave empty to build every version
+          clusternest/api's PrometheusCreate.version currently offers.
+        required: false
+
+jobs:
+
+  determine-tags:
+    name: Determine versions to build
+    runs-on: ubuntu-latest
+    outputs:
+      tags: ${{ steps.set.outputs.tags }}
+    steps:
+    - id: set
+      run: |
+        if [ -n "${{ inputs.tag }}" ]; then
+          echo 'tags=["${{ inputs.tag }}"]' >> "$GITHUB_OUTPUT"
+        else
+          # Keep in sync with clusternest/api's schemas.py PrometheusCreate.version
+          # / models.py Prometheus.version.
+          echo 'tags=["v1.122.27","v1.136.15","v1.148.1"]' >> "$GITHUB_OUTPUT"
+        fi
+
+  build:
+    name: Build ${{ matrix.app }} ${{ matrix.tag }}
+    needs: determine-tags
+    runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+      contents: read
+
+    concurrency:
+      group: ${{ github.workflow }}-${{ matrix.app }}-${{ matrix.tag }}
+      cancel-in-progress: false
+
+    strategy:
+      fail-fast: false
+      matrix:
+        tag: ${{ fromJson(needs.determine-tags.outputs.tags) }}
+        app: [vminsert, vmselect, vmstorage]
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        submodules: true
+
+    - name: Checkout VictoriaMetrics ${{ matrix.tag }}-cluster
+      # vminsert/vmselect/vmstorage's Dockerfiles don't exist on the plain
+      # version tag (e.g. v1.122.27) - they only exist on the "-cluster"
+      # suffixed tag, a separate ref in the same repo (confirmed by diffing
+      # the two tags' trees). This always checks out whatever the matrix
+      # asked for, ignoring the submodule's own pinned commit entirely.
+      working-directory: victoriametrics
+      run: |
+        git fetch --depth 1 origin tag ${{ matrix.tag }}-cluster
+        git checkout ${{ matrix.tag }}-cluster
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+    - name: Login to GitHub Container Registry
+      if: github.event_name != 'pull_request'
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and push
+      # Upstream's own publish-via-docker target (deployment/docker/Makefile)
+      # - compiles via a docker-based Go builder, then a buildx multi-arch
+      # push. DOCKER_REGISTRIES/DOCKER_NAMESPACE override its Docker
+      # Hub/quay.io defaults to push here instead.
+      if: github.event_name != 'pull_request'
+      working-directory: victoriametrics
+      run: |
+        make publish-via-docker \
+          APP_NAME=${{ matrix.app }} \
+          PKG_TAG=${{ matrix.tag }}-cluster \
+          DOCKER_REGISTRIES=ghcr.io \
+          DOCKER_NAMESPACE=${{ github.repository_owner }}
+
+    - name: Build only (PR - no push)
+      if: github.event_name == 'pull_request'
+      working-directory: victoriametrics
+      run: |
+        make app-via-docker-linux-amd64 APP_NAME=${{ matrix.app }}
