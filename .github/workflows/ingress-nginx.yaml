@@ -1,0 +1,113 @@
+name: Docker Image CI - ingress-nginx
+
+on:
+  push:
+    branches: [ master ]
+    paths: [ "ingress-nginx", ".github/workflows/ingress-nginx.yaml" ]
+  workflow_dispatch: {}
+  # No pull_request trigger, unlike the other workflows here: the
+  # controller image build needs the nginx base image already pushed (it
+  # pulls it as BASE_IMAGE), so a PR run's build-only/no-push mode would
+  # break that dependency. Matches clusternest/infra's original
+  # build-ingress-nginx.yml, which had the same push/workflow_dispatch-only
+  # scope for the same reason.
+
+jobs:
+
+  build:
+    name: Build NGINX + Controller Images
+    runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+      contents: read
+
+    concurrency:
+      group: ${{ github.workflow }}
+      cancel-in-progress: false
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v7
+      with:
+        submodules: true
+        # Not shallow, unlike the other workflows here - git describe
+        # below needs real tag history to find the nearest controller-*
+        # tag; a shallow clone would very likely miss it.
+        fetch-depth: 0
+
+    - name: Set image tags
+      id: tags
+      # The committed TAG file goes stale between upstream releases, so
+      # derive the controller tag from the submodule's own controller-*
+      # tags instead (same approach as clusternest/infra's
+      # build-ingress-nginx.yml, which this is ported from).
+      run: |
+        git -C ingress-nginx describe --tags --match 'controller-*' | sed 's/^controller-//' > ingress-nginx/TAG
+        echo "nginx=$(cat ingress-nginx/images/nginx/TAG)" >> "$GITHUB_OUTPUT"
+        echo "controller=$(cat ingress-nginx/TAG)" >> "$GITHUB_OUTPUT"
+        echo "go=$(cat ingress-nginx/GOLANG_VERSION)" >> "$GITHUB_OUTPUT"
+
+    - name: Lowercase repo owner
+      id: repo-owner
+      run: echo "owner=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v4
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v4
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v4
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and Push NGINX Base Image
+      uses: docker/build-push-action@v7
+      with:
+        context: ingress-nginx/images/nginx/rootfs
+        pull: true
+        push: true
+        tags: ghcr.io/${{ steps.repo-owner.outputs.owner }}/nginx:${{ steps.tags.outputs.nginx }}
+        provenance: false
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ steps.tags.outputs.go }}
+
+    - name: Compile controller binaries
+      # rootfs/Dockerfile just copies prebuilt bin/${TARGETARCH}/* into the
+      # image. The upstream `make build` target shells out to
+      # build/run-in-docker.sh, which bind-mounts the workspace into a
+      # sibling build container over the shared docker.sock - ported
+      # straight from clusternest/infra's build-ingress-nginx.yml, where
+      # that came up empty for the same reason it would here too (job
+      # workspace isn't a host bind-mount). build/build.sh itself has no
+      # docker dependency (it's just a `go build` wrapper), so run it
+      # directly instead of through run-in-docker.sh.
+      working-directory: ingress-nginx
+      env:
+        PKG: k8s.io/ingress-nginx
+        ARCH: amd64
+        CGO_ENABLED: 0
+      run: |
+        export COMMIT_SHA="git-$(git rev-parse --short HEAD)"
+        export REPO_INFO="$(git config --get remote.origin.url)"
+        export TAG="${{ steps.tags.outputs.controller }}"
+        bash build/build.sh
+
+    - name: Build and Push Controller Image
+      uses: docker/build-push-action@v7
+      with:
+        context: ingress-nginx/rootfs
+        pull: true
+        push: true
+        tags: ghcr.io/${{ steps.repo-owner.outputs.owner }}/controller:${{ steps.tags.outputs.controller }}
+        build-args: |
+          BASE_IMAGE=ghcr.io/${{ steps.repo-owner.outputs.owner }}/nginx:${{ steps.tags.outputs.nginx }}
+          VERSION=${{ steps.tags.outputs.controller }}
+          TARGETARCH=amd64
+        provenance: false

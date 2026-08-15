@@ -22,3 +22,11 @@
 [submodule "spoofdpi"]
 	path = spoofdpi
 	url = git@github.com:xvzc/SpoofDPI.git
+[submodule "opensearch-operator"]
+	path = opensearch-operator
+	url = https://github.com/ThisIsQasim/opensearch-k8s-operator.git
+	branch = fix/stale-exclusion-nodepool-removal
+	shallow = true
+[submodule "ingress-nginx"]
+	path = ingress-nginx
+	url = https://github.com/chainguard-forks/ingress-nginx.git
