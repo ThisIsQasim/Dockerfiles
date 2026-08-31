@@ -25,7 +25,7 @@
 [submodule "opensearch-operator"]
 	path = opensearch-operator
 	url = https://github.com/ThisIsQasim/opensearch-k8s-operator.git
-	branch = fix/stale-exclusion-nodepool-removal
+	branch = fix/security-config-preserve-unmanaged-users
 	shallow = true
 [submodule "ingress-nginx"]
 	path = ingress-nginx
