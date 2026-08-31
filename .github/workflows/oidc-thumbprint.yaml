@@ -2,11 +2,11 @@ name: Docker Image CI - OIDC Thumprint
 
 on:
   push:
-    branches: [ master ]
+    branches: [ "main" ]
     tags: ["v*", "oidc-thumbprint-*"]
     paths: [ "oidc-thumbprint/**", ".github/workflows/oidc-thumbprint.yaml", ".github/workflows/build-and-push.yaml" ]
   pull_request:
-    branches: [ master ]
+    branches: [ "main" ]
     paths: [ "oidc-thumbprint" ]
   workflow_dispatch:
 

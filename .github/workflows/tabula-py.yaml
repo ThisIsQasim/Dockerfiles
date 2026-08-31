@@ -2,11 +2,11 @@ name: Docker Image CI - tabula-py
 
 on:
   push:
-    branches: [ master ]
+    branches: [ "main" ]
     tags: ["v*", "tabula-py-*"]
     paths: [ "tabula-py/**", ".github/workflows/tabula-py.yaml", ".github/workflows/build-and-push.yaml" ]
   pull_request:
-    branches: [ master ]
+    branches: [ "main" ]
     paths: [ "tabula-py" ]
   workflow_dispatch:
 

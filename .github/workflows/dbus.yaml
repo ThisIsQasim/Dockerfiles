@@ -2,11 +2,11 @@ name: Docker Image CI - dbus
 
 on:
   push:
-    branches: [ master ]
+    branches: [ "main" ]
     tags: ["v*", "dbus-*"]
     paths: [ "dbus/**", ".github/workflows/dbus.yaml", ".github/workflows/build-and-push.yaml" ]
   pull_request:
-    branches: [ master ]
+    branches: [ "main" ]
     paths: [ "dbus" ]
   workflow_dispatch:
 

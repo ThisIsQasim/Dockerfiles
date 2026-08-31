@@ -2,10 +2,10 @@ name: Docker Image CI - Kibana
 
 on:
   push:
-    branches: [ master ]
+    branches: [ "main" ]
     paths: [ "kibana" ]
   pull_request:
-    branches: [ master ]
+    branches: [ "main" ]
     paths: [ "kibana" ]
   workflow_dispatch:
 

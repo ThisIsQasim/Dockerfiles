@@ -2,11 +2,11 @@ name: Docker Image CI - SpoofDPI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ "main" ]
     tags: ['v*','spoofdpi*']
     paths: [ "spoofdpi/**", ".github/workflows/spoofdpi.yaml", ".github/workflows/build-and-push.yaml"]
   pull_request:
-    branches: [ master ]
+    branches: [ "main" ]
     paths: [ "spoofdpi" ]
   workflow_dispatch:
 

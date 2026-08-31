@@ -2,7 +2,7 @@ name: Docker Image CI - ingress-nginx
 
 on:
   push:
-    branches: [ master ]
+    branches: [ "main" ]
     paths: [ "ingress-nginx", ".github/workflows/ingress-nginx.yaml" ]
   workflow_dispatch: {}
   # No pull_request trigger, unlike the other workflows here: the

@@ -2,11 +2,11 @@ name: Docker Image CI - rsync
 
 on:
   push:
-    branches: [ master ]
+    branches: [ "main" ]
     tags: ["v*", "rsync-*"]
     paths: [ "rsync/**", ".github/workflows/rsync.yaml", ".github/workflows/build-and-push.yaml" ]
   pull_request:
-    branches: [ master ]
+    branches: [ "main" ]
     paths: [ "rsync" ]
   workflow_dispatch:
 

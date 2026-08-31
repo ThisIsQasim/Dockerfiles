@@ -2,10 +2,10 @@ name: Docker Image CI - OpenSearch Operator
 
 on:
   push:
-    branches: [ master ]
+    branches: [ "main" ]
     paths: [ "opensearch-operator", ".github/workflows/opensearch-operator.yaml" ]
   pull_request:
-    branches: [ master ]
+    branches: [ "main" ]
     paths: [ "opensearch-operator" ]
   workflow_dispatch: {}
 

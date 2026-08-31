@@ -2,10 +2,10 @@ name: Docker Image CI - Elasticsearch
 
 on:
   push:
-    branches: [ master ]
+    branches: [ "main" ]
     paths: [ "elasticsearch" ]
   pull_request:
-    branches: [ master ]
+    branches: [ "main" ]
     paths: [ "elasticsearch" ]
   workflow_dispatch:
 
