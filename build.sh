@@ -1,5 +1,5 @@
 #!/bin/bash
-DEFAULTPROJECTS=(curator elasticsearch gitbook jsonresume kibana logrotate onlyoffice rsyslog samba tastyigniter transmission turn z-push)
+DEFAULTPROJECTS=(jsonresume logrotate onlyoffice rsyslog samba tastyigniter transmission turn z-push)
 PROJECTS=("${PROJECTS[@]:-${DEFAULTPROJECTS[@]}}")
 
 for PROJECT in ${PROJECTS[@]} ; do

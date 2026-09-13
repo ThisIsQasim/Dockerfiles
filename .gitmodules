@@ -19,9 +19,6 @@
 [submodule "speedtest-go"]
 	path = speedtest-go
 	url = git@github.com:ThisIsQasim/speedtest-go.git
-[submodule "spoofdpi"]
-	path = spoofdpi
-	url = git@github.com:xvzc/SpoofDPI.git
 [submodule "opensearch-operator"]
 	path = opensearch-operator
 	url = https://github.com/ThisIsQasim/opensearch-k8s-operator.git
