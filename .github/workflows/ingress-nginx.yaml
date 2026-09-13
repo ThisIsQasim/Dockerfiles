@@ -68,6 +68,7 @@ jobs:
       uses: docker/build-push-action@v7
       with:
         context: ingress-nginx/images/nginx/rootfs
+        platforms: linux/amd64,linux/arm64
         pull: true
         push: true
         tags: ghcr.io/${{ steps.repo-owner.outputs.owner }}/nginx:${{ steps.tags.outputs.nginx }}
@@ -79,9 +80,11 @@ jobs:
         go-version: ${{ steps.tags.outputs.go }}
 
     - name: Compile controller binaries
-      # rootfs/Dockerfile just copies prebuilt bin/${TARGETARCH}/* into the
-      # image. The upstream `make build` target shells out to
-      # build/run-in-docker.sh, which bind-mounts the workspace into a
+      # rootfs/Dockerfile copies prebuilt bin/${TARGETARCH}/* into the
+      # image, so both arches need their binaries built up front - buildx
+      # picks the right directory per platform via the auto-populated
+      # TARGETARCH build arg. The upstream `make build` target shells out
+      # to build/run-in-docker.sh, which bind-mounts the workspace into a
       # sibling build container over the shared docker.sock - ported
       # straight from clusternest/infra's build-ingress-nginx.yml, where
       # that came up empty for the same reason it would here too (job
@@ -91,23 +94,26 @@ jobs:
       working-directory: ingress-nginx
       env:
         PKG: k8s.io/ingress-nginx
-        ARCH: amd64
+        GOOS: linux
         CGO_ENABLED: 0
       run: |
         export COMMIT_SHA="git-$(git rev-parse --short HEAD)"
         export REPO_INFO="$(git config --get remote.origin.url)"
         export TAG="${{ steps.tags.outputs.controller }}"
-        bash build/build.sh
+        for ARCH in amd64 arm64; do
+          export ARCH
+          bash build/build.sh
+        done
 
     - name: Build and Push Controller Image
       uses: docker/build-push-action@v7
       with:
         context: ingress-nginx/rootfs
+        platforms: linux/amd64,linux/arm64
         pull: true
         push: true
         tags: ghcr.io/${{ steps.repo-owner.outputs.owner }}/controller:${{ steps.tags.outputs.controller }}
         build-args: |
           BASE_IMAGE=ghcr.io/${{ steps.repo-owner.outputs.owner }}/nginx:${{ steps.tags.outputs.nginx }}
           VERSION=${{ steps.tags.outputs.controller }}
-          TARGETARCH=amd64
         provenance: false
