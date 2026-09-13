@@ -1,0 +1,18 @@
+name: Docker Image CI - logrotate
+
+on:
+  push:
+    branches: [ "main" ]
+    tags: ["v*", "logrotate-*"]
+    paths: [ "logrotate/**", ".github/workflows/logrotate.yaml", ".github/workflows/build-and-push.yaml" ]
+  pull_request:
+    branches: [ "main" ]
+    paths: [ "logrotate" ]
+  workflow_dispatch:
+
+jobs:
+
+  build-and-push:
+    uses: ./.github/workflows/build-and-push.yaml
+    with:
+      app: logrotate

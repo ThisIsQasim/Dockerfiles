@@ -1,11 +1,17 @@
 FROM debian:buster-slim as installer
+ARG TARGETARCH
 RUN export DEBIAN_FRONTEND=noninteractive &&\
     \
     apt-get -q -y update &&\
     apt-get -q -y install curl unzip
 
-RUN curl -LO "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" &&\
-    unzip awscli-exe-linux-x86_64.zip &&\
+RUN case "${TARGETARCH}" in \
+      amd64) AWSCLI_ARCH=x86_64 ;; \
+      arm64) AWSCLI_ARCH=aarch64 ;; \
+      *) echo "unsupported TARGETARCH: ${TARGETARCH}" >&2; exit 1 ;; \
+    esac &&\
+    curl -LO "https://awscli.amazonaws.com/awscli-exe-linux-${AWSCLI_ARCH}.zip" &&\
+    unzip "awscli-exe-linux-${AWSCLI_ARCH}.zip" &&\
     ./aws/install --bin-dir /aws-cli-bin/
     
 FROM debian:buster-slim
