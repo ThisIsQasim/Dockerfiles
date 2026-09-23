@@ -1,0 +1,18 @@
+name: Docker Image CI - mpp-solar
+
+on:
+  push:
+    branches: [ "main" ]
+    tags: ["v*", "mpp-solar-*"]
+    paths: [ "mpp-solar/**", ".github/workflows/mpp-solar.yaml", ".github/workflows/build-and-push.yaml" ]
+  pull_request:
+    branches: [ "main" ]
+    paths: [ "mpp-solar" ]
+  workflow_dispatch:
+
+jobs:
+
+  build-and-push:
+    uses: ./.github/workflows/build-and-push.yaml
+    with:
+      app: mpp-solar
