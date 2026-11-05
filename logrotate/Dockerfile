@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim as installer
+FROM debian:stable-slim as installer
 ARG TARGETARCH
 RUN export DEBIAN_FRONTEND=noninteractive &&\
     \
@@ -14,7 +14,7 @@ RUN case "${TARGETARCH}" in \
     unzip "awscli-exe-linux-${AWSCLI_ARCH}.zip" &&\
     ./aws/install --bin-dir /aws-cli-bin/
     
-FROM debian:bookworm-slim
+FROM debian:stable-slim
 
 RUN export DEBIAN_FRONTEND=noninteractive &&\
     \
