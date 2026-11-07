@@ -18,7 +18,7 @@
 	url = git@github.com:ThisIsQasim/apcupsd.git
 [submodule "speedtest-go"]
 	path = speedtest-go
-	url = git@github.com:ThisIsQasim/speedtest-go.git
+	url = https://github.com/librespeed/speedtest-go.git
 [submodule "opensearch-operator"]
 	path = opensearch-operator
 	url = https://github.com/opensearch-project/opensearch-k8s-operator.git
